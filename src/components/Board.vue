@@ -2,7 +2,6 @@
 import Square from '@/components/Square.vue'
 import { ref } from 'vue'
 
-let abc = ref('X')
 let squares = ref(Array(9).fill(null))
 function onClick(index: number) {
   squares.value[index] = 'X'
