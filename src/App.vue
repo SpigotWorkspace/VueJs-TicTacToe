@@ -23,7 +23,7 @@ onMounted(() => {
 
 <template>
   <RouterView v-if="connected" />
-  <h1 v-else>WebSocket nicht verbunden</h1>
+  <h1 v-else>WebSocket not connected</h1>
 </template>
 
 <style>

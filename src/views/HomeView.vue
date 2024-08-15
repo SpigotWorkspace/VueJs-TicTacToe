@@ -14,11 +14,11 @@ const dialogRef = ref<HTMLDialogElement | undefined>(undefined)
 
 <template>
   <main>
-    <button class="button" @click="createGame">Spiel erstellen</button>
-    <button class="button" @click="joinGame">Spiel beitreten</button>
+    <button class="button" @click="createGame">Create Game</button>
+    <button class="button" @click="joinGame">Join Game</button>
 
     <dialog ref="dialogRef">
-      <button autofocus @click="dialogRef?.close">Schließen</button>
+      <button autofocus @click="dialogRef?.close">Close</button>
     </dialog>
   </main>
 </template>
