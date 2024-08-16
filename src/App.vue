@@ -9,7 +9,6 @@ const connected = ref(false)
 const client = new Client({
   brokerURL: `ws://${mainStore.hostname}:8080/tictactoe-ws`,
   onConnect: () => {
-    console.debug('connect')
     connected.value = true
   },
   onWebSocketClose: () => {
