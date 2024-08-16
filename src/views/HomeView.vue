@@ -1,11 +1,19 @@
 <script setup lang="ts">
 import { ref } from 'vue'
+import { useMainStore } from '@/stores/main.store'
+import type { IMessage } from '@stomp/stompjs'
 
 const dialogRef = ref<HTMLDialogElement | undefined>(undefined)
 const gameIdInputRef = ref<HTMLInputElement | undefined>(undefined)
 
+const mainStore = useMainStore()
+
 function createGame() {
-  console.debug('createGame')
+  const client = mainStore.getClient
+  client?.publish({ destination: '/app/createGame' })
+  client?.subscribe('/game/createGame', (message: IMessage) => {
+    const gameId = message.body
+  })
 }
 
 function joinGame() {
