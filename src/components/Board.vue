@@ -1,8 +1,13 @@
 <script setup lang="ts">
 import Square from '@/components/Square.vue'
 import { ref } from 'vue'
+import { useRoute } from 'vue-router'
 
 let squares = ref(Array(9).fill(null))
+
+const route = useRoute()
+const gameId = route.params.gameId
+
 function onClick(index: number) {
   squares.value[index] = 'X'
 }
