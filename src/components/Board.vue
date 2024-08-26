@@ -1,12 +1,20 @@
 <script setup lang="ts">
 import Square from '@/components/Square.vue'
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
+import { useMainStore } from '@/stores/main.store'
+import { publishAndSubscribe } from '@/utils/client.utils'
+import type { IMessage } from '@stomp/stompjs'
 
 let squares = ref(Array(9).fill(null))
 
 const route = useRoute()
+const mainStore = useMainStore()
 const gameId = route.params.gameId
+
+onMounted(() => {
+  publishAndSubscribe('joinGame', (message: IMessage) => {}, { body: JSON.stringify({ gameId }) })
+})
 
 function onClick(index: number) {
   squares.value[index] = 'X'

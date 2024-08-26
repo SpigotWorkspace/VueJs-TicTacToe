@@ -1,19 +1,16 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import { useMainStore } from '@/stores/main.store'
 import type { IMessage } from '@stomp/stompjs'
 import { useRouter } from 'vue-router'
+import { publishAndSubscribe } from '@/utils/client.utils'
 
 const dialogRef = ref<HTMLDialogElement | undefined>(undefined)
 const gameIdInputRef = ref<HTMLInputElement | undefined>(undefined)
 
-const mainStore = useMainStore()
 const router = useRouter()
 
 function createGame() {
-  const client = mainStore.getClient
-  client?.publish({ destination: '/app/createGame' })
-  client?.subscribe('/game/createGame', (message: IMessage) => {
+  publishAndSubscribe('createGame', (message: IMessage) => {
     const gameId = message.body
 
     router.push({ name: 'board', params: { gameId } })
