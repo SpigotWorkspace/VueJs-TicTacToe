@@ -34,7 +34,7 @@ function onClick(index: number) {
       </div>
     </main>
   </div>
-  <h1 v-else>Mit keinem Spiel verbunden</h1>
+  <h1 v-else>Not connected to any game</h1>
 </template>
 
 <style scoped>
