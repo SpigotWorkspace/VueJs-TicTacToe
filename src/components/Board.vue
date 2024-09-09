@@ -1,19 +1,24 @@
 <script setup lang="ts">
 import Square from '@/components/Square.vue'
-import { onMounted, ref } from 'vue'
-import { useRoute } from 'vue-router'
+import { onBeforeUnmount, ref } from 'vue'
 import { useMainStore } from '@/stores/main.store'
 import { publishAndSubscribe } from '@/utils/client.utils'
 import type { IMessage } from '@stomp/stompjs'
 
 let squares = ref(Array(9).fill(null))
 
-const route = useRoute()
 const mainStore = useMainStore()
-const gameId = route.params.gameId
+const gameId = mainStore.getGameId
 
-onMounted(() => {
-  publishAndSubscribe('joinGame', (message: IMessage) => {}, { body: JSON.stringify({ gameId }) })
+onBeforeUnmount(() => {
+  publishAndSubscribe(
+    'disconnect',
+    (message: IMessage) => {
+      //TODO
+    },
+    true,
+    true
+  )
 })
 
 function onClick(index: number) {
@@ -22,16 +27,20 @@ function onClick(index: number) {
 </script>
 
 <template>
-  <main>
-    <div id="board">
-      <Square v-for="index in 9" @click="onClick(index - 1)">{{ squares[index - 1] }}</Square>
-    </div>
-  </main>
+  <div v-if="gameId">
+    <main>
+      <div id="board">
+        <Square v-for="index in 9" @click="onClick(index - 1)">{{ squares[index - 1] }}</Square>
+      </div>
+    </main>
+  </div>
+  <h1 v-else>Mit keinem Spiel verbunden</h1>
 </template>
 
 <style scoped>
 main {
   height: 100vh;
+  max-height: 100%;
   display: flex;
   justify-content: center;
   align-items: center;

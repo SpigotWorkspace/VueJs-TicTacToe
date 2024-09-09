@@ -6,7 +6,8 @@ export const useMainStore = defineStore('main', {
   state: (): MainStoreStateInterface => {
     return {
       hostname: window.location.hostname,
-      client: undefined
+      client: undefined,
+      gameId: undefined
     }
   },
   getters: {
@@ -14,8 +15,15 @@ export const useMainStore = defineStore('main', {
       if (state.client === undefined) {
         console.error("Client in store 'main' is undefined")
       }
-
       return state.client as Client
+    },
+    getGameId(state): string | undefined {
+      return state.gameId
+    }
+  },
+  actions: {
+    setGameId(gameId: string): void {
+      this.gameId = gameId
     }
   }
 })

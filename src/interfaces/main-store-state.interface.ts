@@ -4,4 +4,5 @@ import type { StateTree } from 'pinia'
 export interface MainStoreStateInterface extends StateTree {
   hostname: string
   client: Client | undefined
+  gameId: string | undefined
 }
