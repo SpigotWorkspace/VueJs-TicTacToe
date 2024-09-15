@@ -1,14 +1,20 @@
 <script setup lang="ts">
 import Square from '@/components/Square.vue'
-import { onBeforeUnmount, ref } from 'vue'
+import { onBeforeUnmount, onMounted, ref } from 'vue'
 import { useMainStore } from '@/stores/main.store'
-import { publishAndSubscribe } from '@/utils/client.utils'
-import type { IMessage } from '@stomp/stompjs'
+import { publish, publishAndSubscribe } from '@/utils/client.utils'
+import type { IMessage, StompSubscription } from '@stomp/stompjs'
+import type { BaseResultInterface } from '@/interfaces/base-result.interface'
+import { ResultStatusEnum } from '@/interfaces/enums/result-status.enum'
+import { useRouter } from 'vue-router'
 
-let squares = ref(Array(9).fill(null))
+let squares = ref(Array(9).fill(''))
 
+const router = useRouter()
 const mainStore = useMainStore()
 const gameId = mainStore.getGameId
+const clickPath = `click/${gameId}`
+let subscription: StompSubscription | undefined = undefined
 
 onBeforeUnmount(() => {
   publishAndSubscribe(
@@ -19,10 +25,30 @@ onBeforeUnmount(() => {
     true,
     true
   )
+  subscription?.unsubscribe()
+})
+
+onMounted(() => {
+  if (!gameId) {
+    router.push({ name: 'home' })
+    return
+  }
+
+  subscription = publishAndSubscribe(
+    clickPath,
+    (message) => {
+      const baseResult: BaseResultInterface<string[]> = JSON.parse(message.body)
+      if (baseResult.resultStatus == ResultStatusEnum.SUCCESS) {
+        squares.value = baseResult.resultValue
+      }
+    },
+    false,
+    false
+  )
 })
 
 function onClick(index: number) {
-  squares.value[index] = 'X'
+  publish(clickPath, { body: index.toString() })
 }
 </script>
 

@@ -29,3 +29,12 @@ export function publishAndSubscribe(
   client?.publish(params)
   return subscription
 }
+
+export function publish(path: string, publishParams?: Omit<IPublishParams, 'destination'>): void {
+  const mainStore = useMainStore()
+  const client = mainStore.getClient
+
+  let params: IPublishParams = { destination: `/app/${path}` }
+  params = Object.assign(params, publishParams)
+  client?.publish(params)
+}

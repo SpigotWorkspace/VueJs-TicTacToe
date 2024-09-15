@@ -31,7 +31,7 @@ function joinGame() {
   publishAndSubscribe(
     'joinGame',
     (message: IMessage) => {
-      const baseResult: BaseResultInterface = JSON.parse(message.body)
+      const baseResult: BaseResultInterface<string> = JSON.parse(message.body)
       console.debug(baseResult)
       if (baseResult.resultStatus == ResultStatusEnum.FAILURE) {
         console.error(baseResult.errorMessage)

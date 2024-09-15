@@ -1,7 +1,7 @@
 import type { ResultStatusEnum } from '@/interfaces/enums/result-status.enum'
 
-export interface BaseResultInterface {
+export interface BaseResultInterface<T> {
   resultStatus: ResultStatusEnum
-  resultValue: string
+  resultValue: T
   errorMessage: string
 }
