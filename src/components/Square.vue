@@ -6,7 +6,7 @@
 
 <style scoped>
 .square {
-  border: 1px red solid;
+  border: 1px black solid;
   width: 5rem;
   height: 5rem;
   display: flex;

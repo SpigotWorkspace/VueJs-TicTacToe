@@ -55,8 +55,13 @@ function onClick(index: number) {
 <template>
   <div v-if="gameId">
     <main>
+      <h2>
+        GAME-ID: <span>{{ gameId }}</span>
+      </h2>
       <div id="board">
-        <Square v-for="index in 9" @click="onClick(index - 1)">{{ squares[index - 1] }}</Square>
+        <Square v-for="index in 9" :key="index" @click="onClick(index - 1)">{{
+          squares[index - 1]
+        }}</Square>
       </div>
     </main>
   </div>
@@ -65,11 +70,28 @@ function onClick(index: number) {
 
 <style scoped>
 main {
+  background: linear-gradient(#6482e6, #9198e5, #b6b6cc);
   height: 100vh;
   max-height: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
+  user-select: text;
+}
+
+h2 {
+  position: absolute;
+  top: 0;
+  left: 0;
+  margin: 1rem;
+  color: black;
+  font-weight: normal;
+
+  span {
+    color: #243da1;
+    font-weight: bold;
+    user-select: all;
+  }
 }
 
 #board {
