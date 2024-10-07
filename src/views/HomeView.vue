@@ -7,9 +7,12 @@ import { useMainStore } from '@/stores/main.store'
 import { type BaseResultInterface } from '@/interfaces/base-result.interface'
 import { ResultStatusEnum } from '@/interfaces/enums/result-status.enum'
 import { PlayerEnum } from '@/interfaces/enums/player.enum'
+import Dialog from '@/components/Dialog.vue'
 
-const dialogRef = ref<HTMLDialogElement | undefined>(undefined)
+const joinDialogRef = ref<Dialog>(undefined)
+const errorDialogRef = ref<Dialog>(undefined)
 const gameIdInputRef = ref<HTMLInputElement | undefined>(undefined)
+const errorMessage = ref<string>('')
 
 const router = useRouter()
 const mainStore = useMainStore()
@@ -35,6 +38,10 @@ function joinGame() {
       console.debug(baseResult)
       if (baseResult.resultStatus == ResultStatusEnum.FAILURE) {
         console.error(baseResult.errorMessage)
+        errorMessage.value = baseResult.errorMessage
+        if (errorMessage.value) {
+          errorDialogRef.value?.showModal()
+        }
       } else {
         mainStore.joinGame(baseResult.resultValue, PlayerEnum.TWO)
         router.push({ name: 'board' })
@@ -49,23 +56,21 @@ function joinGame() {
 <template>
   <main>
     <button class="button" @click="createGame">Create Game</button>
-    <button class="button" @click="dialogRef?.showModal()">Join Game</button>
+    <button class="button" @click="joinDialogRef?.showModal">Join Game</button>
   </main>
 
-  <dialog ref="dialogRef">
-    <div
-      style="display: flex; justify-content: center; align-items: center; flex-direction: column"
-    >
-      <div style="display: grid; gap: 0.2rem">
-        <label for="input-game-id" style="font-weight: bold; color: rgb(0, 0, 0)">Game-ID</label>
-        <input type="text" id="input-game-id" ref="gameIdInputRef" />
-      </div>
-      <br />
-      <button class="button" @click="joinGame">Join Game</button>
-      <br />
-      <button class="button" autofocus @click="dialogRef?.close">Close</button>
+  <Dialog ref="joinDialogRef">
+    <div style="display: grid; gap: 0.2rem">
+      <label for="input-game-id" style="font-weight: bold; color: rgb(0, 0, 0)">Game-ID</label>
+      <input type="text" id="input-game-id" ref="gameIdInputRef" />
     </div>
-  </dialog>
+    <br />
+    <button class="button" @click="joinGame">Join Game</button>
+  </Dialog>
+
+  <Dialog ref="errorDialogRef" style="height: 10vh">
+    <p style="color: red">{{ errorMessage }}</p>
+  </Dialog>
 </template>
 
 <style scoped>
@@ -77,17 +82,6 @@ main {
   gap: 2rem;
   height: 100vh;
   background: linear-gradient(#6482e6, #9198e5, #b6b6cc);
-}
-
-.button {
-  cursor: pointer;
-  border: none;
-  border-radius: 1rem;
-  min-width: 100px;
-  min-height: 30px;
-  width: 20vw;
-  height: 5vh;
-  font-size: 0.9rem;
 }
 
 #input-game-id {
@@ -102,17 +96,5 @@ main {
 
 #input-game-id:focus {
   outline: none;
-}
-
-dialog {
-  background: linear-gradient(#6482e6, #9198e5, #8989c9);
-  border: none;
-  border-radius: 1rem;
-  overflow: hidden;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  width: 25vw;
-  height: 20vh;
 }
 </style>

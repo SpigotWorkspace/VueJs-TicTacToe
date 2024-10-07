@@ -33,4 +33,15 @@ const notConnectedMessage = computed(() => `WebSocket (${client.brokerURL}) not 
 * {
   user-select: none;
 }
+
+.button {
+  cursor: pointer;
+  border: none;
+  border-radius: 1rem;
+  min-width: 100px;
+  min-height: 30px;
+  width: 20vw;
+  height: 5vh;
+  font-size: 0.9rem;
+}
 </style>
