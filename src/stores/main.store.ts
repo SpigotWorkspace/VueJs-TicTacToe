@@ -1,13 +1,15 @@
 import { defineStore } from 'pinia'
 import type { MainStoreStateInterface } from '@/interfaces/main-store-state.interface'
 import type { Client } from '@stomp/stompjs'
+import { PlayerEnum } from '@/interfaces/enums/player.enum'
 
 export const useMainStore = defineStore('main', {
   state: (): MainStoreStateInterface => {
     return {
       hostname: window.location.hostname,
       client: undefined,
-      gameId: undefined
+      gameId: undefined,
+      playerType: undefined
     }
   },
   getters: {
@@ -19,11 +21,15 @@ export const useMainStore = defineStore('main', {
     },
     getGameId(state): string | undefined {
       return state.gameId
+    },
+    isPlayerOne(state): boolean {
+      return state.playerType == PlayerEnum.ONE
     }
   },
   actions: {
-    setGameId(gameId: string): void {
+    joinGame(gameId: string, playerType: PlayerEnum): void {
       this.gameId = gameId
+      this.playerType = playerType
     }
   }
 })

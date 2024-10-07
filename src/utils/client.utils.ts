@@ -6,7 +6,8 @@ export function publishAndSubscribe(
   callback: (message: IMessage) => void,
   isPrivate?: boolean,
   shouldUnsubscribe: boolean = true,
-  publishParams?: Omit<IPublishParams, 'destination'>
+  publishParams?: Omit<IPublishParams, 'destination'>,
+  shouldPublish: boolean = true
 ): StompSubscription | undefined {
   const mainStore = useMainStore()
   const client = mainStore.getClient
@@ -26,8 +27,19 @@ export function publishAndSubscribe(
       }
     }
   )
-  client?.publish(params)
+  if (shouldPublish) {
+    client?.publish(params)
+  }
+
   return subscription
+}
+
+export function subscribe(
+  path: string,
+  callback: (message: IMessage) => void,
+  isPrivate?: boolean
+): StompSubscription | undefined {
+  return publishAndSubscribe(path, callback, isPrivate, false, {}, false)
 }
 
 export function publish(path: string, publishParams?: Omit<IPublishParams, 'destination'>): void {

@@ -4,8 +4,9 @@ import type { IMessage } from '@stomp/stompjs'
 import { useRouter } from 'vue-router'
 import { publishAndSubscribe } from '@/utils/client.utils'
 import { useMainStore } from '@/stores/main.store'
-import { BaseResultInterface } from '@/interfaces/base-result.interface'
+import { type BaseResultInterface } from '@/interfaces/base-result.interface'
 import { ResultStatusEnum } from '@/interfaces/enums/result-status.enum'
+import { PlayerEnum } from '@/interfaces/enums/player.enum'
 
 const dialogRef = ref<HTMLDialogElement | undefined>(undefined)
 const gameIdInputRef = ref<HTMLInputElement | undefined>(undefined)
@@ -18,9 +19,8 @@ function createGame() {
     'createGame',
     (message: IMessage) => {
       const gameId = message.body
-      mainStore.setGameId(gameId)
+      mainStore.joinGame(gameId, PlayerEnum.ONE)
       router.push({ name: 'board' })
-      console.debug('created game', gameId)
     },
     true
   )
@@ -29,23 +29,19 @@ function createGame() {
 function joinGame() {
   const gameId = gameIdInputRef.value?.value
   publishAndSubscribe(
-    'joinGame',
+    `joinGame/${gameId}`,
     (message: IMessage) => {
       const baseResult: BaseResultInterface<string> = JSON.parse(message.body)
       console.debug(baseResult)
       if (baseResult.resultStatus == ResultStatusEnum.FAILURE) {
         console.error(baseResult.errorMessage)
       } else {
-        mainStore.setGameId(baseResult.resultValue)
+        mainStore.joinGame(baseResult.resultValue, PlayerEnum.TWO)
         router.push({ name: 'board' })
-        console.debug('joined game', gameId)
       }
     },
-    true,
-    true,
-    {
-      body: gameId
-    }
+    false,
+    true
   )
 }
 </script>
