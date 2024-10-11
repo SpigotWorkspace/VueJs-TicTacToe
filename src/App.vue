@@ -7,12 +7,14 @@ import { useMainStore } from '@/stores/main.store'
 const mainStore = useMainStore()
 const connected = ref(false)
 const location = window.location
+const wsProtocol = location.protocol === 'http:' ? 'ws:' : 'wss:'
 
 let brokerURL: string
+
 if (import.meta.env.PROD) {
-  brokerURL = `${location.href.replace(location.protocol, 'ws:')}tictactoe-ws`
+  brokerURL = `${location.href.replace(location.protocol, wsProtocol)}tictactoe-ws`
 } else {
-  brokerURL = `ws://${location.hostname}:8080/tictactoe-ws`
+  brokerURL = `${wsProtocol}//${location.hostname}:8080/tictactoe-ws`
 }
 
 const client = new Client({
