@@ -6,6 +6,9 @@ function showModal() {
   dialogRef.value?.showModal()
 }
 
+function closeModal() {
+  dialogRef.value?.close()
+}
 defineExpose({
   showModal
 })
@@ -18,7 +21,7 @@ defineExpose({
     >
       <slot></slot>
       <br />
-      <button class="button" autofocus @click="dialogRef?.close">Close</button>
+      <button class="button" autofocus @click="closeModal">Close</button>
     </div>
   </dialog>
 </template>

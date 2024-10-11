@@ -6,7 +6,6 @@ import { PlayerEnum } from '@/interfaces/enums/player.enum'
 export const useMainStore = defineStore('main', {
   state: (): MainStoreStateInterface => {
     return {
-      hostname: window.location.hostname,
       client: undefined,
       gameId: undefined,
       playerType: undefined

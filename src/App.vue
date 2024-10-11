@@ -6,8 +6,17 @@ import { useMainStore } from '@/stores/main.store'
 
 const mainStore = useMainStore()
 const connected = ref(false)
+const location = window.location
+
+let brokerURL: string
+if (import.meta.env.PROD) {
+  brokerURL = `${location.href.replace(location.protocol, 'ws:')}tictactoe-ws`
+} else {
+  brokerURL = `ws://${location.hostname}:8080/tictactoe-ws`
+}
+
 const client = new Client({
-  brokerURL: `ws://${mainStore.hostname}:8080/tictactoe-ws`,
+  brokerURL: brokerURL,
   onConnect: () => {
     connected.value = true
   },

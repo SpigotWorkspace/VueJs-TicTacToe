@@ -8,9 +8,8 @@ import { type BaseResultInterface } from '@/interfaces/base-result.interface'
 import { ResultStatusEnum } from '@/interfaces/enums/result-status.enum'
 import { PlayerEnum } from '@/interfaces/enums/player.enum'
 import Dialog from '@/components/Dialog.vue'
-
-const joinDialogRef = ref<Dialog>(undefined)
-const errorDialogRef = ref<Dialog>(undefined)
+const joinDialogRef = ref<typeof Dialog | undefined>(undefined)
+const errorDialogRef = ref<typeof Dialog | undefined>(undefined)
 const gameIdInputRef = ref<HTMLInputElement | undefined>(undefined)
 const errorMessage = ref<string>('')
 
@@ -35,7 +34,6 @@ function joinGame() {
     `joinGame/${gameId}`,
     (message: IMessage) => {
       const baseResult: BaseResultInterface<string> = JSON.parse(message.body)
-      console.debug(baseResult)
       if (baseResult.resultStatus == ResultStatusEnum.FAILURE) {
         console.error(baseResult.errorMessage)
         errorMessage.value = baseResult.errorMessage
