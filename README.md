@@ -1,7 +1,8 @@
 # VueJs-TicTacToe (WIP)
 TicTacToe Frontend with Vue.js
 <br>
-### WIP: Not functional yet
+
+### Playable on https://spigotworkspace.dev/tictactoe/
 
 ## Prerequisites
 Uses [TicTacToe-Backend](https://github.com/SpigotWorkspace/TicTacToe-Backend) as backend.
